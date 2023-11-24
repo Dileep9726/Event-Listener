@@ -14,6 +14,7 @@ public class UserActions {
 
     private static final String DB_NAME = "events";
     private final AppDatabase userDB;
+    private ExecutorService executorService;
 
     public UserActions(Context context) {
         userDB = Room.databaseBuilder(context, AppDatabase.class, DB_NAME).build();
@@ -54,14 +55,14 @@ public class UserActions {
     }
 
     public void insert(final DataModel dataModel) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> userDB.queryDao().insertTask(dataModel));
     }
 
     public void delete(final int id) {
         final LiveData<DataModel> user = getUser(id);
         if (user != null) {
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService = Executors.newSingleThreadExecutor();
             executorService.execute(() -> userDB.queryDao().deleteSpecific(id));
         }
     }
@@ -69,13 +70,13 @@ public class UserActions {
     public void update(final DataModel userData) {
         final LiveData<DataModel> user = getUser(userData.getId());
         if (user != null) {
-            ExecutorService executorService = Executors.newSingleThreadExecutor();
+            executorService = Executors.newSingleThreadExecutor();
             executorService.execute(() -> userDB.queryDao().updateEvents(userData));
         }
     }
 
     public void deleteAll() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService = Executors.newSingleThreadExecutor();
         executorService.execute(() -> userDB.queryDao().deleteAll());
     }
 
